@@ -1,9 +1,11 @@
 # Netlify build configuration for this Next.js (App Router) site.
 #
-# Framework detection is automatic: Netlify installs and keeps updated its own
-# Next.js runtime (the open-source OpenNext-based @netlify/plugin-nextjs) with
-# no configuration required. Do NOT add a [[plugins]] block for it — pinning
-# the package here would opt this site out of those automatic updates.
+# Framework auto-detection did not activate for this site (observed: build
+# ran `next build` successfully, but the deploy step uploaded only a handful
+# of raw repo-root files with 0 functions — i.e. @netlify/plugin-nextjs never
+# ran to convert the .next output into Netlify Functions/Edge Functions).
+# @netlify/plugin-nextjs is pinned as a devDependency and registered below so
+# it always runs regardless of auto-detection.
 # https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/
 #
 # Security headers live in next.config.ts (`headers()`); the runtime reads and
@@ -18,3 +20,6 @@
 
 [build]
   command = "pnpm build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
