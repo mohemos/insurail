@@ -1,0 +1,20 @@
+# Netlify build configuration for this Next.js (App Router) site.
+#
+# Framework detection is automatic: Netlify installs and keeps updated its own
+# Next.js runtime (the open-source OpenNext-based @netlify/plugin-nextjs) with
+# no configuration required. Do NOT add a [[plugins]] block for it — pinning
+# the package here would opt this site out of those automatic updates.
+# https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/
+#
+# Security headers live in next.config.ts (`headers()`); the runtime reads and
+# applies them, so no [[headers]] block is needed here either.
+#
+# Node.js version is pinned in .nvmrc, not here (Next.js 16 requires >= 20.9).
+#
+# NOTE: this repo also has a pnpm-workspace.yaml, but it only configures
+# pnpm's build-script allowlist (see its `allowBuilds` key) — it does not
+# declare any packages, so this is a single-package repo, not a monorepo. If
+# Netlify's UI asks for a base directory anyway, pick the repository root.
+
+[build]
+  command = "pnpm build"

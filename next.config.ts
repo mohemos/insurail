@@ -1,10 +1,12 @@
 import type { NextConfig } from "next";
 
 /**
- * Sensible security headers for a static marketing site.
+ * Sensible security headers for a static marketing site. Netlify's Next.js
+ * runtime reads this `headers()` config and applies it for you, so no
+ * separate netlify.toml [[headers]] block is needed.
  * A Content-Security-Policy is intentionally left out: Next.js inlines small
  * scripts that would need nonces (which forces dynamic rendering). Add one at
- * the edge (Vercel project settings) if your policy requires it.
+ * your host's edge config if your policy requires it.
  */
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },

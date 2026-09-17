@@ -1,8 +1,8 @@
 # Insurail — marketing site
 
 Single-page marketing website for **Insurail**, the embedded microinsurance API for Africa, starting in Nigeria.
-Built with Next.js 16 (App Router), TypeScript, Tailwind CSS 4, Framer Motion and Lucide. Deploys to Vercel as a
-statically pre-rendered page plus one serverless function for the lead form.
+Built with Next.js 16 (App Router), TypeScript, Tailwind CSS 4, Framer Motion and Lucide. Deploys to Netlify via
+its zero-config Next.js runtime: a statically pre-rendered page plus one serverless function for the lead form.
 
 - Copy lives in one place: [`content/site.ts`](content/site.ts)
 - Design tokens live in one place: [`app/globals.css`](app/globals.css) (see [`DESIGN.md`](DESIGN.md))
@@ -101,7 +101,7 @@ lead to every transport configured through environment variables. If nothing is 
 - in development the lead is printed to the terminal and the form shows success;
 - in production the route returns 503 and the form shows an honest error with the contact email.
 
-Set at least one of these in `.env.local` (or Vercel → Settings → Environment Variables):
+Set at least one of these in `.env.local` (or Netlify → Site configuration → Environment variables):
 
 | Variable                               | Purpose                                                                                       |
 | -------------------------------------- | --------------------------------------------------------------------------------------------- |
@@ -119,32 +119,43 @@ Events tracked around the form: `form_submit`, `form_success`, `form_error` (wit
 
 ## Analytics
 
-Analytics are off unless enabled. Both options are cookie-free, so the site shows a small dismissible notice
-rather than a consent banner.
+Analytics are off unless enabled. Plausible is cookie-free, so the site shows a small dismissible notice rather
+than a consent banner when it's on.
 
-| Variable                          | Effect                                                                |
-| --------------------------------- | --------------------------------------------------------------------- |
+| Variable                          | Effect                                                                        |
+| --------------------------------- | ------------------------------------------------------------------------------ |
 | `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`    | Loads Plausible for that domain (`NEXT_PUBLIC_PLAUSIBLE_HOST` if self-hosted) |
-| `NEXT_PUBLIC_VERCEL_ANALYTICS=1`  | Loads Vercel Web Analytics (enable Analytics on the Vercel project first) |
+
+Alternatively, **Netlify Analytics** needs no code at all: it reads server logs and is switched on from the
+Netlify dashboard (Site configuration → Analytics). It's a paid add-on and works alongside or instead of Plausible.
 
 Custom events are sent with `trackEvent()` in `lib/analytics.ts`. Server-rendered links and buttons are tracked
 declaratively with `data-event="cta_click" data-event-cta="hero_primary"`; outbound links are tracked automatically.
 
-## Deploying to Vercel (insurail.io)
+## Deploying to Netlify (insurail.io)
 
 1. Push this folder to a Git repository (the scaffold did not initialise git: `git init && git add -A && git commit -m "Insurail site"`).
-2. In Vercel, **Add New → Project**, import the repository. Framework preset: Next.js. No build settings need changing.
-3. Add environment variables from `.env.example` (at minimum a lead transport). `NEXT_PUBLIC_SITE_URL` should be `https://insurail.io`.
-4. Deploy. Then **Settings → Domains → Add** `insurail.io` and `www.insurail.io` (redirect `www` to the apex).
-   Point DNS at Vercel: an `A` record for `@` to `76.76.21.21` and a `CNAME` for `www` to `cname.vercel-dns.com`
-   (Vercel shows the exact values). HTTPS is issued automatically.
-5. Optional: enable Vercel Web Analytics and set `NEXT_PUBLIC_VERCEL_ANALYTICS=1`.
+2. In Netlify, **Add new site → Import an existing project**, and connect the repository. Next.js is auto-detected:
+   Netlify installs its Next.js runtime for you, so the build command and publish settings it suggests need no changes.
+   (This repo also ships a minimal [`netlify.toml`](netlify.toml) that pins the pnpm build command; see the comments
+   in that file for why it deliberately does *not* pin the Next.js plugin itself.)
+3. Add environment variables from `.env.example` under **Site configuration → Environment variables** (at minimum a
+   lead transport). Set `NEXT_PUBLIC_SITE_URL` to `https://insurail.io`.
+4. Deploy. Then **Site configuration → Domain management → Add a domain** for `insurail.io`, and add `www.insurail.io`
+   as a domain alias (or redirect it to the apex). Point DNS at Netlify:
+   - Easiest: delegate the domain to **Netlify DNS** and follow the nameserver instructions it gives you.
+   - Or, with your existing DNS provider: an `ALIAS`/`ANAME` record (or flattened `CNAME`) for `@` to
+     `apex-loadbalancer.netlify.com` — or, if your provider doesn't support those, an `A` record for `@` to
+     `75.2.60.5` — and a `CNAME` for `www` to `<your-site-name>.netlify.app`. Netlify shows the exact values for
+     your site under Domain management. HTTPS is issued automatically once DNS resolves.
+5. Optional: turn on **Netlify Analytics** (Site configuration → Analytics) — no environment variable needed.
 
-No `vercel.json` is needed. Security headers are set in `next.config.ts`.
+Security headers are set in `next.config.ts`; Netlify's Next.js runtime applies them for you.
 
-The page is statically pre-rendered at build time; `/api/lead` runs as a serverless function. A pure `output: "export"`
-was not used because the brief asks for an API route, which needs a server; if you ever want a fully static export,
-point the forms straight at a form backend (Formspree etc.) and drop the route.
+The page is statically pre-rendered at build time; `/api/lead` runs as a serverless function, provisioned automatically
+by Netlify's Next.js runtime. A pure `output: "export"` was not used because the brief asks for an API route, which
+needs a server; if you ever want a fully static export, point the forms straight at a form backend (Formspree etc.)
+and drop the route.
 
 ## Assumptions made
 
@@ -157,8 +168,9 @@ point the forms straight at a form backend (Formspree etc.) and drop the route.
   analytics). Have counsel review before launch.
 - **Fonts** are self-hosted latin subsets of Inter (body) and Inter Tight (headings). The naira sign is outside the
   latin subset and renders from the system font; this avoids an extra 85 KB font file. See `assets/fonts/README.md`.
-- **Analytics**: Plausible is wired through its script tag; Vercel Analytics through its script and event queue.
-  If you prefer the `@vercel/analytics` package, replace `components/analytics/Analytics.tsx`.
+- **Analytics**: Plausible is wired through its script tag, kept host-agnostic on purpose. Netlify Analytics needs
+  no code (dashboard toggle only). To add another provider (Fathom, Umami, …), extend `lib/analytics.ts` and
+  `components/analytics/Analytics.tsx`.
 - **Regulatory language** (NAICOM, NDPA) is descriptive and non-committal; nothing on the site promises a licence
   status or a claims SLA.
 
