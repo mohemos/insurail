@@ -1,0 +1,312 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------------
+   Design tokens
+   ------------------------------------------------------------------------
+   Every colour on the site comes from the variables below. Change a value
+   here and every utility that references it (bg-bg, text-fg-muted,
+   bg-primary, ...) updates. Dark mode swaps the same variables under
+   prefers-color-scheme. See DESIGN.md for the reasoning and contrast table.
+   ------------------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --bg: #fafaf8;
+  --surface: #ffffff;
+  --surface-2: #f1f4f3;
+  --border: #d9e2e0;
+  --border-strong: #7a908d;
+
+  /* Text */
+  --fg: #0e1f1e;
+  --fg-muted: #46605e;
+  --fg-subtle: #5c7370;
+
+  /* Primary: deep teal */
+  --primary: #0f5b57;
+  --primary-hover: #0b4a47;
+  --primary-fg: #ffffff;
+  --primary-soft: #e2f0ed;
+
+  /* Accent: warm amber. Used as a fill with dark text, never as text on light. */
+  --accent: #f2a33a;
+  --accent-hover: #e8932a;
+  --accent-fg: #0e1f1e;
+  --accent-text: #8a4b00;
+
+  /* "Ink" band (developer section) */
+  --ink: #0e1f1e;
+  --ink-surface: #142a2b;
+  --ink-border: #24393a;
+  --ink-fg: #ecf1f0;
+  --ink-fg-muted: #a9b9b7;
+  --ink-primary: #5fc9bf;
+
+  /* Closing call-to-action band */
+  --cta: #0f5b57;
+  --cta-fg: #ffffff;
+  --cta-fg-muted: #b9d6d2;
+
+  /* Code blocks (same in both themes) */
+  --code-bg: #0b1f22;
+  --code-fg: #e6edec;
+  --code-key: #8fd3cc;
+  --code-string: #f7c46c;
+  --code-number: #9ed0ff;
+  --code-comment: #8aa19e;
+  --code-keyword: #c9b8ff;
+  --code-verb: #a8e6a1;
+
+  /* Feedback */
+  --success: #0f7a4a;
+  --success-bg: #e3f5ec;
+  --error: #b3261e;
+  --error-bg: #fcebea;
+
+  --ring: var(--primary);
+  --shadow-card: 0 1px 2px rgb(14 31 30 / 0.04), 0 8px 24px -12px rgb(14 31 30 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(14 31 30 / 0.05), 0 20px 40px -16px rgb(14 31 30 / 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --bg: #0b1516;
+    --surface: #10201f;
+    --surface-2: #172a29;
+    --border: #24393a;
+    --border-strong: #66807d;
+
+    --fg: #ecf1f0;
+    --fg-muted: #a9b9b7;
+    --fg-subtle: #8fa3a0;
+
+    --primary: #5fc9bf;
+    --primary-hover: #7ad8cf;
+    --primary-fg: #0b1516;
+    --primary-soft: #123332;
+
+    --accent: #f2a33a;
+    --accent-hover: #f6b25a;
+    --accent-fg: #0b1516;
+    --accent-text: #f2b45c;
+
+    --ink: #060f10;
+    --ink-surface: #10201f;
+    --ink-border: #24393a;
+    --ink-fg: #ecf1f0;
+    --ink-fg-muted: #a9b9b7;
+    --ink-primary: #5fc9bf;
+
+    --cta: #123332;
+    --cta-fg: #ecf1f0;
+    --cta-fg-muted: #a9c9c4;
+
+    --success: #6fd6a0;
+    --success-bg: #0f2a1e;
+    --error: #ff8a80;
+    --error-bg: #3a1614;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.3), 0 20px 40px -16px rgb(0 0 0 / 0.6);
+  }
+}
+
+/* Map tokens to Tailwind utilities (bg-bg, text-fg, border-border, ...). */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-text: var(--accent-text);
+
+  --color-ink: var(--ink);
+  --color-ink-surface: var(--ink-surface);
+  --color-ink-border: var(--ink-border);
+  --color-ink-fg: var(--ink-fg);
+  --color-ink-fg-muted: var(--ink-fg-muted);
+  --color-ink-primary: var(--ink-primary);
+
+  --color-cta: var(--cta);
+  --color-cta-fg: var(--cta-fg);
+  --color-cta-fg-muted: var(--cta-fg-muted);
+
+  --color-code-bg: var(--code-bg);
+  --color-code-fg: var(--code-fg);
+
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-error: var(--error);
+  --color-error-bg: var(--error-bg);
+  --color-ring: var(--ring);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-lift: var(--shadow-lift);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-inter-tight), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* Type scale, layout and motion tokens. */
+@theme {
+  --container-page: 75rem; /* ~1200px content width */
+
+  --text-display: clamp(2.5rem, 1.7rem + 3.6vw, 4.5rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 600;
+
+  --text-h2: clamp(1.875rem, 1.4rem + 2vw, 3rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.025em;
+  --text-h2--font-weight: 600;
+
+  --text-h3: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.015em;
+  --text-h3--font-weight: 600;
+
+  --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  --text-lead--line-height: 1.55;
+
+  --text-eyebrow: 0.8125rem;
+  --text-eyebrow--line-height: 1.25;
+  --text-eyebrow--letter-spacing: 0.08em;
+  --text-eyebrow--font-weight: 600;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --animate-fade-up: fade-up 0.8s var(--ease-out-quart) both;
+  --animate-fade-in: fade-in 0.6s ease-out both;
+  --animate-caret: caret 1s steps(2, jump-none) infinite;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes caret {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem; /* keep anchored sections clear of the sticky header */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p, li {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--primary-soft);
+    color: var(--fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  summary {
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Syntax tokens for code blocks (see lib/code/tokenize.ts) */
+  .tok-string { color: var(--code-string); }
+  .tok-key { color: var(--code-key); }
+  .tok-number { color: var(--code-number); }
+  .tok-comment { color: var(--code-comment); font-style: italic; }
+  .tok-keyword { color: var(--code-keyword); }
+  .tok-verb { color: var(--code-verb); font-weight: 600; }
+  .tok-flag { color: var(--code-key); }
+  .tok-url { color: var(--code-fg); }
+
+  /* FAQ: animate <details> where the browser supports it, instant elsewhere. */
+  @supports (interpolate-size: allow-keywords) {
+    .faq-details {
+      interpolate-size: allow-keywords;
+    }
+    .faq-details::details-content {
+      block-size: 0;
+      overflow-y: clip;
+      transition: block-size 0.3s var(--ease-out-quart), content-visibility 0.3s allow-discrete;
+    }
+    .faq-details[open]::details-content {
+      block-size: auto;
+    }
+  }
+
+  /* Honeypot field: off-screen for humans, present for bots. */
+  .hp-field {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* Subtle "rail" grid used as a decorative background in the hero. */
+  .rail-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--fg) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--fg) 6%, transparent) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 75%);
+  }
+}

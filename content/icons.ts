@@ -1,0 +1,35 @@
+/**
+ * Icon names that content can reference. The mapping to Lucide components
+ * lives in components/ui/Icon.tsx so that this file stays pure data.
+ */
+export type IconName =
+  | "smartphone"
+  | "store"
+  | "shopping-cart"
+  | "truck"
+  | "graduation-cap"
+  | "monitor-smartphone"
+  | "credit-card"
+  | "repeat"
+  | "scan-search"
+  | "pen-tool"
+  | "plug"
+  | "rocket"
+  | "clipboard-check"
+  | "landmark"
+  | "lock"
+  | "shield-check"
+  | "compass"
+  | "ruler"
+  | "trending-up"
+  | "braces"
+  | "webhook"
+  | "flask-conical"
+  | "package"
+  | "mouse-pointer-click"
+  | "file-check"
+  | "hand-coins"
+  | "layers"
+  | "blend"
+  | "mail"
+  | "map-pin";
